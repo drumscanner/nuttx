@@ -160,6 +160,27 @@ int board_bmp180_initialize(int devno, int busno);
 #endif
 
 /****************************************************************************
+ * Name: board_bme680_initialize
+ *
+ * Description:
+ *   Initialize and register the BME680 Temperature, Pressure, Humidity
+ *   and Gas Resistance sensor.
+ *
+ * Input Parameters:
+ *   devno - The device number, used to build the device path as
+ *           /dev/uorb/sensor_gas0
+ *   busno - The I2C bus number
+ *
+ * Returned Value:
+ *   Zero (OK) on success; a negated errno value on failure.
+ *
+ ****************************************************************************/
+
+ #ifdef CONFIG_SENSORS_BME680
+ int board_bme680_initialize(int devno, int busno);
+ #endif
+ 
+/****************************************************************************
  * Name: board_i2sdev_initialize
  *
  * Description:

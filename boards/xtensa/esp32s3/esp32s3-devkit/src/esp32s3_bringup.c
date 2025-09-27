@@ -395,6 +395,17 @@ int esp32s3_bringup(void)
     }
 #endif
 
+#ifdef CONFIG_SENSORS_BME680
+  /* Try to register BME680 device in I2C0 */
+
+  ret = board_bme680_initialize(0, ESP32S3_I2C0);
+  if (ret < 0)
+    {
+      syslog(LOG_ERR,
+             "Failed to initialize BME680 driver for I2C0: %d\n", ret);
+    }
+#endif
+
 #if defined(CONFIG_ESPRESSIF_I2S)
 
 #ifdef CONFIG_AUDIO_CS4344
