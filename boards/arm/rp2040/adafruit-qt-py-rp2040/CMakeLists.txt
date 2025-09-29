@@ -1,5 +1,7 @@
 # ##############################################################################
-# boards/arm64/bcm2711/raspberrypi-4b/src/CMakeLists.txt
+# boards/arm/rp2040/adafruit-qt-py-rp2040/CMakeLists.txt
+#
+# SPDX-License-Identifier: Apache-2.0
 #
 # Licensed to the Apache Software Foundation (ASF) under one or more contributor
 # license agreements.  See the NOTICE file distributed with this work for
@@ -18,22 +20,21 @@
 #
 # ##############################################################################
 
-set(SRCS rpi4b_boardinitialize.c rpi4b_bringup.c)
+add_subdirectory(src)
 
-if(CONFIG_ARCH_LEDS)
-  list(APPEND SRCS rpi4b_autoleds.c)
-endif()
+add_custom_target(
+  nuttx_post_build
+  DEPENDS nuttx
+  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+  COMMENT "Regenerate nuttx.uf2")
 
-if(CONFIG_BOARDCTL)
-  list(APPEND SRCS rpi4b_appinit.c)
-endif()
-
-if(CONFIG_DEV_GPIO)
-  list(APPEND SRCS rpi4b_gpio.c)
-endif()
-
-if(CONFIG_BCM2711_I2C_DRIVER)
-  list(APPEND SRCS bcm2711_i2cdev.c)
-endif()
-
-target_sources(board PRIVATE ${SRCS})
+# The uf2 command to convert ELF/BIN to UF2
+add_custom_command(
+  TARGET nuttx_post_build
+  POST_BUILD
+  COMMAND picotool ARGS uf2 convert --quiet -t elf nuttx nuttx.uf2
+  COMMAND_EXPAND_LISTS
+  COMMAND ${CMAKE_COMMAND} -E echo "nuttx.uf2" >>
+          ${CMAKE_BINARY_DIR}/nuttx.manifest
+  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+  COMMENT "Regenerate nuttx.uf2")

@@ -1,5 +1,7 @@
 # ##############################################################################
-# boards/arm64/bcm2711/raspberrypi-4b/src/CMakeLists.txt
+# boards/arm/rp2040/adafruit-qt-py-rp2040/src/CMakeLists.txt
+#
+# SPDX-License-Identifier: Apache-2.0
 #
 # Licensed to the Apache Software Foundation (ASF) under one or more contributor
 # license agreements.  See the NOTICE file distributed with this work for
@@ -18,22 +20,24 @@
 #
 # ##############################################################################
 
-set(SRCS rpi4b_boardinitialize.c rpi4b_bringup.c)
+set(SRCS rp2040_boardinitialize.c rp2040_bringup.c)
 
-if(CONFIG_ARCH_LEDS)
-  list(APPEND SRCS rpi4b_autoleds.c)
+if(CONFIG_DEV_GPIO)
+  list(APPEND SRCS rp2040_gpio.c)
 endif()
 
 if(CONFIG_BOARDCTL)
-  list(APPEND SRCS rpi4b_appinit.c)
-endif()
-
-if(CONFIG_DEV_GPIO)
-  list(APPEND SRCS rpi4b_gpio.c)
-endif()
-
-if(CONFIG_BCM2711_I2C_DRIVER)
-  list(APPEND SRCS bcm2711_i2cdev.c)
+  list(APPEND SRCS rp2040_appinit.c)
 endif()
 
 target_sources(board PRIVATE ${SRCS})
+
+if(CONFIG_RP2040_FLASH_BOOT)
+  set_property(
+    GLOBAL PROPERTY LD_SCRIPT
+                    "${NUTTX_BOARD_DIR}/scripts/adafruit-qt-py-rp2040-flash.ld")
+else()
+  set_property(
+    GLOBAL PROPERTY LD_SCRIPT
+                    "${NUTTX_BOARD_DIR}/scripts/adafruit-qt-py-rp2040-sram.ld")
+endif()
