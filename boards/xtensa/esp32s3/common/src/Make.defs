@@ -70,6 +70,10 @@ ifeq ($(CONFIG_SENSORS_BME680),y)
   CSRCS += esp32s3_board_bme680.c
 endif
 
+ifeq ($(CONFIG_SENSORS_BMI270),y)
+  CSRCS += esp32s3_board_bmi270.c
+endif
+
 ifeq ($(CONFIG_ESP32S3_OTG),y)
   CSRCS += esp32s3_board_usb.c
 endif

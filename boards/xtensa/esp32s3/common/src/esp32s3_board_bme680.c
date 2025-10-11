@@ -32,6 +32,7 @@
 #include <nuttx/arch.h>
 #include <nuttx/i2c/i2c_master.h>
 #include <nuttx/sensors/bme680.h>
+#include "esp32s3_board_bme680.h"
 
 #include "esp32s3_i2c.h"
 

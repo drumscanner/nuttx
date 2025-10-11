@@ -1,5 +1,5 @@
 /****************************************************************************
- * boards/xtensa/esp32/common/src/esp32_bme680.c
+ * boards/xtensa/esp32/common/include/esp32_bmp180.h
  *
  * SPDX-License-Identifier: Apache-2.0
  *
@@ -20,37 +20,55 @@
  *
  ****************************************************************************/
 
+#ifndef __BOARDS_XTENSA_ESP32_COMMON_INCLUDE_ESP32_BMI270_H
+#define __BOARDS_XTENSA_ESP32_COMMON_INCLUDE_ESP32_BMI270_H
+
 /****************************************************************************
  * Included Files
  ****************************************************************************/
 
 #include <nuttx/config.h>
 
-#include <stdio.h>
-#include <debug.h>
-
-#include <nuttx/arch.h>
-#include <nuttx/sensors/bme680.h>
-#include <nuttx/i2c/i2c_master.h>
-
-#include "esp32_board_i2c.h"
-#include "esp32_i2c.h"
-#include "esp32_ltr308.h"
-
 /****************************************************************************
- * Public Functions
+ * Pre-processor Definitions
  ****************************************************************************/
 
 /****************************************************************************
- * Name: board_bme680_initialize
+ * Type Definitions
+ ****************************************************************************/
+
+/****************************************************************************
+ * Public Types
+ ****************************************************************************/
+
+/****************************************************************************
+ * Public Data
+ ****************************************************************************/
+
+#ifdef __cplusplus
+#define EXTERN extern "C"
+extern "C"
+{
+#else
+#define EXTERN extern
+#endif
+
+/****************************************************************************
+ * Inline Functions
+ ****************************************************************************/
+
+/****************************************************************************
+ * Public Function Prototypes
+ ****************************************************************************/
+
+/****************************************************************************
+ * Name: board_bmp180_initialize
  *
  * Description:
- *   Initialize and register the BME680 Temperature, Pressure, Humidity
- *  and Gas Resistance sensor.
+ *   Initialize and register the BMP180 Pressure Sensor driver.
  *
  * Input Parameters:
- *   devno - The device number, used to build the device path as
- *           /dev/uorb/sensor_gas0
+ *   devno - The device number, used to build the device path as /dev/pressN
  *   busno - The I2C bus number
  *
  * Returned Value:
@@ -58,32 +76,11 @@
  *
  ****************************************************************************/
 
-int board_bme680_initialize(int devno, int busno)
-{
-  struct i2c_master_s *i2c;
-  int ret;
+int board_bmi270_initialize(int devno, int busno);
 
-  sninfo("Initializing BME680!\n");
-
-  /* Initialize BME680 */
-
-  i2c = esp32_i2cbus_initialize(busno);
-  if (i2c != NULL)
-    {
-      /* Then try to register the gas sensor in one of the two I2C
-       * available controllers.
-       */
-
-      ret = bme680_register(devno, i2c);
-      if (ret < 0)
-        {
-          snerr("ERROR: Error registering BME680 in I2C%d\n", busno);
-        }
-    }
-  else
-    {
-      ret = -ENODEV;
-    }
-
-  return ret;
+#undef EXTERN
+#ifdef __cplusplus
 }
+#endif
+
+#endif /* __BOARDS_XTENSA_ESP32_COMMON_INCLUDE_ESP32_BMI270_H */
